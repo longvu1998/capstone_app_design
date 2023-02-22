@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Send data to ESP32</title>
+  </head>
+  <body>
+    <form id="input-form" method="POST">
+      <label for="input-data">Input data:</label>
+      <input type="text" id="input-data" name="input-data" />
+      <br />
+      <button type="submit">Send</button>
+    </form>
+
+    <script>
+      const form = document.getElementById("input-form");
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        const inputField = document.getElementById("input-data");
+        const inputData = inputField.value;
+
+        const xhr = new XMLHttpRequest();
+        const url = "http://ESP32-IP-ADDRESS/input"; // Replace with the IP address of your ESP32
+
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader(
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        );
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            console.log(xhr.responseText);
+          }
+        };
+
+        xhr.send("data=" + inputData);
+      });
+    </script>
+  </body>
+</html>
